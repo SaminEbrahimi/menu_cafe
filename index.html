@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منوی دیجیتال کافه</title>
+  <style>
+    body { font-family: 'Vazir', sans-serif; background: #f4f4f4; margin:0; padding:0; }
+    .menu-container { display: flex; flex-wrap: wrap; justify-content: center; padding: 20px; }
+    .menu-item { background: #fff; border-radius: 10px; box-shadow:0 4px 6px rgba(0,0,0,0.1); margin:10px; width:250px; text-align:center; padding:15px; }
+    .menu-item img { width:100%; border-radius:10px; }
+    .menu-item h3 { font-size:18px; margin:10px 0; }
+    .menu-item p { font-size: 14px; color:#777; margin:5px 0; }
+    .price { font-size:16px; color:#333; margin:10px 0; }
+    .quantity { display:flex; justify-content:center; align-items:center; margin:10px 0; }
+    .quantity button { background:#007bff; color:#fff; border:none; border-radius:5px; padding:5px 10px; cursor:pointer; margin:0 5px; }
+    .quantity input { width:40px; text-align:center; font-size:16px; border:1px solid #ccc; border-radius:5px; padding:5px; }
+    #table { width:60px; padding:5px; margin-top:10px; }
+    .order-btn { background:#28a745; color:#fff; border:none; border-radius:5px; padding:10px 20px; cursor:pointer; margin-top:10px; width:100%; }
+    .order-btn:hover { background:#218838; }
+  </style>
+</head>
+<body>
+
+  <div class="menu-container">
+    <!-- آیتم کاپوچینو -->
+    <div class="menu-item">
+      <img src="coffee.jpg" alt="کاپوچینو">
+      <h3>کاپوچینو</h3>
+      <p style="font-size:12px; color:#777; margin-top:-5px;">شیر، اسپرسو، دارچین</p>
+      <p class="price">۸۰,۰۰۰ تومان</p>
+      <div class="quantity">
+        <button onclick="changeQty('cappuccino', -1)">➖</button>
+        <input type="number" id="cappuccino" value="0" min="0" readonly>
+        <button onclick="changeQty('cappuccino', 1)">➕</button>
+      </div>
+    </div>
+
+    <!-- آیتم کیک شکلاتی -->
+    <div class="menu-item">
+      <img src="cake.jpg" alt="کیک شکلاتی">
+      <h3>کیک شکلاتی</h3>
+      <p style="font-size:12px; color:#777; margin-top:-5px;">آرد، کاکائو، شکلات، خامه</p>
+      <p class="price">۱۲۰,۰۰۰ تومان</p>
+      <div class="quantity">
+        <button onclick="changeQty('cake', -1)">➖</button>
+        <input type="number" id="cake" value="0" min="0" readonly>
+        <button onclick="changeQty('cake', 1)">➕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- شماره میز و دکمه ثبت نهایی -->
+  <div style="text-align:center; margin:20px;">
+    <label>شماره میز: </label>
+    <input type="number" id="table" placeholder="مثلا 5" min="1">
+    <br><br>
+    <button class="order-btn" onclick="submitOrder()">📩 ثبت سفارش</button>
+  </div>
+
+  <script>
+    let orders = {cappuccino:0, cake:0};
+
+    function changeQty(item, num) {
+      orders[item] += num;
+      if (orders[item] < 0) orders[item] = 0;
+      document.getElementById(item).value = orders[item];
+    }
+
+    function submitOrder() {
+      let table = document.getElementById('table').value;
+      if (!table) {
+        alert('لطفا شماره میز را وارد کنید');
+        return;
+      }
+
+      let msg = `سفارش میز ${table}:\n`;
+      for (let item in orders) {
+        if (orders[item] > 0) {
+          let name = item === 'cappuccino' ? 'کاپوچینو' : 'کیک شکلاتی';
+          msg += `${name} × ${orders[item]}\n`;
+        }
+      }
+
+      if (msg === `سفارش میز ${table}:\n`) {
+        alert('هیچ سفارشی انتخاب نشده');
+        return;
+      }
+
+      // شماره واتساپ باریستا اینجا بذار
+      let phone = "989123456789"; // تغییر بده به شماره خودت
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+  </script>
+
+</body>
+</html>
